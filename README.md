@@ -1,1 +1,0 @@
-# airflow-eks-course
