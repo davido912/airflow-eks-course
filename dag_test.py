@@ -24,6 +24,7 @@ from airflow.models import DAG
 from airflow.operators.bash_operator import BashOperator
 from airflow.operators.dummy_operator import DummyOperator
 from airflow.utils.dates import days_ago
+import time
 
 args = {
     'owner': 'Airflow',
@@ -64,7 +65,7 @@ for i in range(3):
 # [START howto_operator_bash_template]
 also_run_this = BashOperator(
     task_id='also_run_this',
-    bash_command='echo "run_id={{ run_id }} | dag_run={{ dag_run }}"',
+    bash_command='sleep 180',
     dag=dag,
 )
 # [END howto_operator_bash_template]
