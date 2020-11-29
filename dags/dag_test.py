@@ -25,8 +25,7 @@ from airflow.operators.bash_operator import BashOperator
 from airflow.operators.dummy_operator import DummyOperator
 from airflow.utils.dates import days_ago
 from airflow.operators.python_operator import PythonOperator
-import time
-from plugins.plug_test import test_plug
+from operator_content.plug_test import test_plug
 
 args = {
     'owner': 'Airflow',
