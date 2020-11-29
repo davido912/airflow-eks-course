@@ -24,7 +24,9 @@ from airflow.models import DAG
 from airflow.operators.bash_operator import BashOperator
 from airflow.operators.dummy_operator import DummyOperator
 from airflow.utils.dates import days_ago
+from airflow.operators.python_operator import PythonOperator
 import time
+from plugins.plug_test import test_plug
 
 args = {
     'owner': 'Airflow',
@@ -44,15 +46,21 @@ run_this_last = DummyOperator(
     dag=dag,
 )
 
+
+plugins_test = PythonOperator(task_id='test_plug',
+                          dag=dag,
+                          python_callable=test_plug,
+                          op_args=[])
+
 # [START howto_operator_bash]
 run_this = BashOperator(
     task_id='run_after_loop',
-    bash_command='echo 1',
+    bash_command="echo 1",
     dag=dag,
 )
 # [END howto_operator_bash]
 
-run_this >> run_this_last
+run_this >> run_this_last >> plugins_test
 
 for i in range(3):
     task = BashOperator(
