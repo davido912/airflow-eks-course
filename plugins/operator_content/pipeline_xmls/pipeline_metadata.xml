@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<pipeline>
+    <pipeline_paths root_dir="automated_overnight_assets"
+                    source_sql_dir="source_queries"
+                    table_metadata_dir="importer_metadata"
+    />
+    <local_paths temp_dir="automated_overnight_assets"
+    />
+    <source type="mysql">
+            <conn id="aurora_prod_db_gbr" obs_source_id="3" />
+    </source>
+    <s3 conn_id="my_s3_conn" prefix="automated_overnight_assets" file_pattern=".*.csv.gz"/>
+    <destination type="snowflake" conn_id="snowflake_wh_xs">
+        <stage name="definitions.AUTOMATED_OVERNIGHT_ASSETS_CSV_STAGE" staging_path="s3://raisin-airflow-st/automated_overnight_assets"
+                                                  production_path="s3://raisin-airflow-migration/automated_overnight_assets"
+        />
+        <file_format name="definitions.AUTOMATED_OVERNIGHT_ASSETS_FILE_FORMAT">
+            <params TYPE="'CSV'"
+                    COMPRESSION="'GZIP'"
+                    FIELD_DELIMITER="'\t'"
+                    SKIP_HEADER="0"
+                    TRIM_SPACE="TRUE"
+                    ENCODING="'ISO-8859-1'"
+                    NULL_IF="('\\N', 'NULL', 'NUL', '')"
+            />
+        </file_format>
+    </destination>
+</pipeline>

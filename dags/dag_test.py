@@ -19,6 +19,7 @@
 
 from builtins import range
 from datetime import timedelta
+import xml.etree.ElementTree as ET
 
 from airflow.models import DAG
 from airflow.operators.bash_operator import BashOperator
@@ -45,11 +46,22 @@ run_this_last = DummyOperator(
     dag=dag,
 )
 
+def parse_xml(xml, param_replace_dict={}):
+    tree = ET.parse(xml)
+    tree = tree.getroot()
+    xml_string = ET.tostring(tree, encoding='utf8', method='xml')
+    xml_string = xml_string.decode()
+
+    return ET.fromstring(xml_string)  # return a new XML tree with replaced parameters
+
+info = parse_xml('/opt/airflow/dags/plugins/pipeline_xmls/pipeline_metadata.xml')
 
 plugins_test = PythonOperator(task_id='test_plug',
                           dag=dag,
                           python_callable=test_plug,
                           op_args=[])
+
+
 
 # [START howto_operator_bash]
 run_this = BashOperator(
