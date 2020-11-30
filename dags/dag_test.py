@@ -26,7 +26,7 @@ from airflow.operators.bash_operator import BashOperator
 from airflow.operators.dummy_operator import DummyOperator
 from airflow.utils.dates import days_ago
 from airflow.operators.python_operator import PythonOperator
-from operator_content.plug_test import test_plug
+# from operator_content.plug_test import test_plug
 
 args = {
     'owner': 'Airflow',
@@ -46,20 +46,20 @@ run_this_last = DummyOperator(
     dag=dag,
 )
 
-def parse_xml(xml, param_replace_dict={}):
-    tree = ET.parse(xml)
-    tree = tree.getroot()
-    xml_string = ET.tostring(tree, encoding='utf8', method='xml')
-    xml_string = xml_string.decode()
+# def parse_xml(xml, param_replace_dict={}):
+#     tree = ET.parse(xml)
+#     tree = tree.getroot()
+#     xml_string = ET.tostring(tree, encoding='utf8', method='xml')
+#     xml_string = xml_string.decode()
 
-    return ET.fromstring(xml_string)  # return a new XML tree with replaced parameters
+#     return ET.fromstring(xml_string)  # return a new XML tree with replaced parameters
 
 
 
-plugins_test = PythonOperator(task_id='test_plug',
-                          dag=dag,
-                          python_callable=test_plug,
-                          op_args=[])
+# plugins_test = PythonOperator(task_id='test_plug',
+#                           dag=dag,
+#                           python_callable=test_plug,
+#                           op_args=[])
 
 
 
@@ -71,7 +71,8 @@ run_this = BashOperator(
 )
 # [END howto_operator_bash]
 
-run_this >> run_this_last >> plugins_test
+# run_this >> run_this_last >> plugins_test
+run_this >> run_this_last
 
 for i in range(3):
     task = BashOperator(
