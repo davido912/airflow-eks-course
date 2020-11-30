@@ -54,7 +54,7 @@ def parse_xml(xml, param_replace_dict={}):
 
     return ET.fromstring(xml_string)  # return a new XML tree with replaced parameters
 
-info = parse_xml('/opt/airflow/dags/pipeline/pipeline_xmls/pipeline_metadata.xml')
+
 
 plugins_test = PythonOperator(task_id='test_plug',
                           dag=dag,
